@@ -118,6 +118,11 @@ define(function (require) {
 
   function initializeViewModel() {
     // create the top-level view model
+    // N.B. This is kept as a global to avoid re-engineering the whole
+    // project and losing the focus of this article. However, this seems
+    // to be a hack to allow global state (i.e. favourites) to be stored 
+    // somewhere other than the application level (i.e. in the 
+    // ApplicationViewModel).
     window.propertySearchViewModel = new PropertySearchViewModel();
     propertySearchViewModel.maxRecentSearch = 3;
 
@@ -176,7 +181,7 @@ define(function (require) {
 
   }
 
-  $(document).ready(function () {
+  $(function () {
     document.addEventListener("deviceready", initializeViewModel, false);
 
     // initialize view models immediately when testing
