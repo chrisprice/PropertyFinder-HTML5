@@ -248,7 +248,7 @@
       <div data-bind="visible: currentView() != 'propertyView' && currentView() != 'favouritesView'" >
         <a  class="ui-btn-right ui-btn ui-btn-icon-left ui-btn-corner-all ui-shadow ui-btn-up-b"
             href="javascript: return false;"
-            data-bind="click: function() { navigateTo(new ViewModel.FavouritesViewModel(propertySearchViewModel)) }">
+            data-bind="click: function() { propertySearchViewModel.viewFavourites() }">
           <span class="ui-btn-inner ui-btn-corner-all">
             <span class="ui-btn-text">Fave</span>
             <span class="ui-icon ui-icon-grid ui-icon-shadow"></span>
@@ -259,7 +259,7 @@
       <div data-bind="visible: currentView() == 'propertyView'">
         <a  class="ui-btn-right ui-btn ui-btn-icon-left ui-btn-corner-all ui-shadow ui-btn-up-b"
             href="javascript: return false;" 
-            data-bind="click: function() { propertySearchViewModel.addToFavourites.call(propertySearchViewModel, currentViewModel()); }">
+            data-bind="click: function() { propertySearchViewModel.addToFavourites(currentViewModel()); }">
           <span class="ui-btn-inner ui-btn-corner-all">
             <span class="ui-btn-text">Fave</span>
             <span class="ui-icon ui-icon-star ui-icon-shadow"
@@ -270,7 +270,6 @@
         </a>
       </div>
     </div>
-
     <div class="ui-content">   
     </div>
 

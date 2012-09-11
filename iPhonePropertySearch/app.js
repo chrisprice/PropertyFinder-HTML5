@@ -2,10 +2,8 @@ define(function (require) {
   var PropertySearchViewModel = require("./viewModel/PropertySearchViewModel");
   var util = require("./viewModel/util");
   var application = require("./viewModel/ApplicationViewModel").Instance;
-  
-  var myScroll,
-      propertySearchViewModel = null;
 
+  var myScroll;
 
   function fadeImages() {
     $("img.ui-li-thumb:not(.shown)").bind("load", function () {
@@ -120,7 +118,7 @@ define(function (require) {
 
   function initializeViewModel() {
     // create the top-level view model
-    propertySearchViewModel = new PropertySearchViewModel();
+    window.propertySearchViewModel = new PropertySearchViewModel();
     propertySearchViewModel.maxRecentSearch = 3;
 
     ko.applyBindings(application);
@@ -188,5 +186,3 @@ define(function (require) {
   });
 
 });
-
-var propertySearchViewModel = {};
