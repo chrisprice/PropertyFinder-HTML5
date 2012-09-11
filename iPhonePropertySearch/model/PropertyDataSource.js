@@ -3,6 +3,7 @@ define(function (require) {
   var Location = require("./Location");
   var PropertyDataSourceResponse = require("./PropertyDataSourceResponse");
   var PropertySearchResponseCode = require("./PropertySearchResponseCode");
+  var JSONDataSource = require("./JSONDataSource");
     
 
   function PropertyDataSource(config) {
@@ -15,7 +16,7 @@ define(function (require) {
     // ----- private variables
 
     // A source of JSON data.
-    var jsonDataSource = config.dataSource;
+    this.jsonDataSource = new JSONDataSource();
 
     // ----- private functions
 
@@ -86,23 +87,19 @@ define(function (require) {
     // ----- public functions
 
     this.findProperties = function (location, pageNumber, callback, errorCallback) {
-      jsonDataSource.findProperties(location, pageNumber, function (results) {
+      this.jsonDataSource.findProperties(location, pageNumber, function (results) {
         callback(parseResponse(results));
       }, errorCallback);
     };
 
     this.findPropertiesByCoordinate = function (latitude, longitude, pageNumber, callback, errorCallback) {
-      jsonDataSource.findPropertiesByCoordinate(latitude, longitude, pageNumber, function (results) {
+      this.jsonDataSource.findPropertiesByCoordinate(latitude, longitude, pageNumber, function (results) {
         callback(parseResponse(results));
       }, errorCallback);
     };
   }
 
-  var DataSource = require("./JSONDataSource");
-  var config = {
-    dataSource: new DataSource()
-  };
-  PropertyDataSource.Instance = new PropertyDataSource(config);
+  PropertyDataSource.Instance = new PropertyDataSource();
 
   return PropertyDataSource;
 });
