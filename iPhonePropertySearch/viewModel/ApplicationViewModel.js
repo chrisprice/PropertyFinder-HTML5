@@ -1,6 +1,4 @@
-﻿/// <reference path="..//intellisense.js" />
-
-/*global $, ViewModel, ko, window, propertySearchViewModel, hydrateObject */
+﻿/*global $, ViewModel, ko, window, propertySearchViewModel, hydrateObject */
 
 ViewModel.ApplicationViewModel = function () {
   /// <summary>
