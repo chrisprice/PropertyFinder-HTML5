@@ -1,7 +1,7 @@
 ﻿(function () {
   var DEBUG = 3, WARN = 2, ERROR = 1, NONE = 0;
 
-  intellisense.requirejsLogLevel = DEBUG;
+  intellisense.requirejsLogLevel = ERROR;
 
   if (intellisense.requirejsLogLevel >= DEBUG) {
     intellisense.logMessage("Re-read _references.js ");
@@ -90,7 +90,8 @@
         log(DEBUG, "define", "process", "module", index);
         if (index >= modules.length) {
           // this should never happen when the correct modules are loaded, it should be caught by the break guard above
-          log(ERROR, "define", "process", "mismatch", level, index, modules.length);
+          log(ERROR, "Incorrect dependencies loaded, close and re-open the file. This can happen if you modify or remove a dependency, it is always best to close and re-open the file after making any dependency changes.");
+          log(DEBUG, "define", "process", "mismatch", level, index, modules.length);
           return;
         }
         processModule(levelReferences, modules[index++]);
