@@ -1,12 +1,19 @@
 ﻿(function () {
   var DEBUG = 3, WARN = 2, ERROR = 1, NONE = 0;
 
-  intellisense.requirejsLogLevel = WARN;
+  intellisense.requirejsLogLevel = DEBUG;
 
   if (intellisense.requirejsLogLevel >= DEBUG) {
     intellisense.logMessage("Re-read _references.js ");
   }
 
+  function log(level) {
+    var msg = Array.prototype.slice.call(arguments, 1);
+    if (intellisense.requirejsLogLevel >= level) {
+      msg.splice(0, 0, level == DEBUG ? 'DEBUG' : level == WARN ? 'WARN' : level == ERROR ? 'ERROR' : 'UNKNOWN');
+      intellisense.logMessage(msg.join(':'));
+    }
+  }
   
   function hashCode() {
     var hash = 0;
@@ -55,9 +62,7 @@
   }
 
   window.define = function (module) {
-    if (intellisense.requirejsLogLevel >= DEBUG) {
-      intellisense.logMessage("define:" + modules.length + ":" + hashCode(module.toString()));
-    }
+    log(DEBUG, "define", modules.length, hashCode(module.toString()));
 
     // a decent test for the end of the scripts seems to be a duplicate script
     // sadly equality doesn't cut it, so string compare
@@ -69,33 +74,23 @@
     // remove the root, it should not be considered a module (we still have a reference to it)
     modules.pop();
 
-    if (intellisense.requirejsLogLevel >= DEBUG) {
-      intellisense.logMessage("define:process:" + modules.length);
-    }
+    log(DEBUG, "define", "process", modules.length);
     var level = 0;
     var levelReferences = referencesByLevel[level] = [];
     processModule(levelReferences, module);
     var index = 0;
     while (levelReferences.length) {
       levelReferences = referencesByLevel[++level] = [];
-      if (intellisense.requirejsLogLevel >= DEBUG) {
-        intellisense.logMessage("define:process:level:" + level);
-      }
+      log(DEBUG, "define", "process", "level", level);
       if (index >= modules.length) {
-        if (intellisense.requirejsLogLevel >= WARN) {
-          intellisense.logMessage("define:process:break:" + level + ":" + index + ":" + modules.length);
-        }
+        log(WARN, "define", "process", "break", level, index, modules.length);
         break;
       }
       for (var i = 0; i < referencesByLevel[level - 1].length; i++) {
-        if (intellisense.requirejsLogLevel >= DEBUG) {
-          intellisense.logMessage("define:process:module:" + index);
-        }
+        log(DEBUG, "define", "process", "module", index);
         if (index >= modules.length) {
           // this should never happen when the correct modules are loaded, it should be caught by the break guard above
-          if (intellisense.requirejsLogLevel >= ERROR) {
-            intellisense.logMessage("define:process:mismatch:" + level + ":" + index + ":" + modules.length);
-          }
+          log(ERROR, "define", "process", "mismatch", level, index, modules.length);
           return;
         }
         processModule(levelReferences, modules[index++]);
@@ -103,28 +98,22 @@
     }
 
     if (references.length !== modules.length) {
-      if (intellisense.requirejsLogLevel >= WARN) {
-        intellisense.logMessage("define:mismatch:" + references.length + ":" + modules.length);
-      }
+      log(WARN, "define", "mismatch", references.length, modules.length);
       references.forEach(loadScript);
       // there's no point continuing, the modules will very likely be mismatched
       //return;
     } else {
       if (intellisense.requirejsLogLevel >= DEBUG) {
         references.forEach(function (ref, i) {
-          intellisense.logMessage(i + ":" + ref + ":" + modules[i]);
+          log(DEBUG, i, ref, modules[i]);
         });
       }
     }
 
-    if (intellisense.requirejsLogLevel >= DEBUG) {
-      intellisense.logMessage("define:evaluate");
-    }
+    log(DEBUG, "define", "evaluate");
     module(function require(ref) {
       var idx = references.indexOf(ref);
-      if (intellisense.requirejsLogLevel >= DEBUG) {
-        intellisense.logMessage("define:evaluate:" + ref + ":" + idx);
-      }
+      log(DEBUG, "define", "evaluate", ref ,idx);
       var module = modules[idx];
       return module ? modules[idx](require) : undefinedWithCompletionsOf(null);
     });
