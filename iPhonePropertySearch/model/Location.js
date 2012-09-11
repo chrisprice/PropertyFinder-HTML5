@@ -11,5 +11,5 @@ define(function () {
     this.longTitle = config.longTitle;
     // the query name
     this.placeName = config.placeName;
-  }
+  };
 });

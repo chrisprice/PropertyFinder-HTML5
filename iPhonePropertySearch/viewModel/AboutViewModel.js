@@ -1,18 +1,21 @@
-/// <reference path="..//intellisense.js" />
+define(function (require) {
+  var util = require("./util");
 
-/*global ViewModel, propertySearchViewModel, $*/
+  function AboutViewModel(propertySearchViewModel) {
+    /// <summary>
+    /// The view model that backs the about page
+    /// </summary>
 
-
-ViewModel.AboutViewModel = function (propertySearchViewModel) {
-  /// <summary>
-  /// The view model that backs the about page
-  /// </summary>
-
-  // ----- framework fields
+    // ----- framework fields
   
-  this.template = "aboutView";
-  this.factoryName = "AboutViewModel";
+    this.template = "aboutView";
+    this.factoryName = "AboutViewModel";
 
-  // ----- public fields
-  this.locationEnabled = propertySearchViewModel.locationEnabled;
-};
+    // ----- public fields
+    this.locationEnabled = propertySearchViewModel.locationEnabled;
+  }
+
+  util.registerFactory("AboutViewModel", AboutViewModel);
+
+  return AboutViewModel;
+});

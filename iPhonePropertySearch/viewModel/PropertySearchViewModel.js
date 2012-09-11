@@ -1,227 +1,238 @@
-/// <reference path="..//intellisense.js" />
-
-/*global $, ViewModel, ko, propertyDataSource, Model, navigator, application */
-
-ViewModel.PropertySearchViewModel = function () {
-  /// <summary>
-  /// The 'top level' property search view model.
-  /// </summary>
-
-  // ----- private fields
-  var synchroniseSearchStrings = true,
-    that = this;
-
-  // ----- framework fields
-  this.template = "propertySearchView";
-  this.factoryName = "PropertySearchViewModel";
-
-  // ----- public fields
-  this.maxRecentSearch = 5;
-  this.searchDisplayString = ko.observable("");
-  this.userMessage = ko.observable();
-  this.searchLocation = undefined;
-  this.isSearchEnabled = ko.observable(true);
-  this.locationEnabled = ko.observable(true);
-  this.locations = ko.observableArray();
-  this.favourites = ko.observableArray();
-  this.recentSearches = ko.observableArray();
-
-  // synchronised the search display string and the search-string
-  this.searchDisplayString.subscribe(function () {
-    if (synchroniseSearchStrings) {
-      var newLocation = new ViewModel.LocationViewModel();
-      newLocation.initialise(that.searchDisplayString());
-      that.searchLocation = newLocation;
-    }
-  });
-
-
-  // ----- public functions 
-
-  this.executeSearch = function () {
+define(function (require) {
+  var application = require("./ApplicationViewModel").Instance;
+  var PropertySearchResponseCode = require("../model/PropertySearchResponseCode");
+  var LocationViewModel = require("./LocationViewModel");
+  var SearchResultsViewModel = require("./SearchResultsViewModel");
+  var GeolocationViewModel = require("./GeolocationViewModel");
+  var FavouritesViewModel = require("./FavouritesViewModel");
+  var AboutViewModel = require("./AboutViewModel");
+  var util = require("./util");
+  
+  function PropertySearchViewModel() {
     /// <summary>
-    /// Executes a search based on the current search string
+    /// The 'top level' property search view model.
     /// </summary>
 
-    that.userMessage("");
-    that.isSearchEnabled(false);
+    // ----- private fields
+    var synchroniseSearchStrings = true,
+      that = this;
 
-    function errorCallback(error) {
-      /// <summary>
-      /// A callback that is invoked if the search fails, in order to report the failure to the end user
-      /// </summary>
-      that.userMessage("An error occurred while searching. Please check your network connection and try again.");
-      that.isSearchEnabled(true);
-    }
+    // ----- framework fields
+    this.template = "propertySearchView";
+    this.factoryName = "PropertySearchViewModel";
 
-    function successCallback(results) {
-      /// <summary>
-      /// A callback that is invoked if the search succeeds
-      /// </summary>
+    // ----- public fields
+    this.maxRecentSearch = 5;
+    this.searchDisplayString = ko.observable("");
+    this.userMessage = ko.observable();
+    this.searchLocation = undefined;
+    this.isSearchEnabled = ko.observable(true);
+    this.locationEnabled = ko.observable(true);
+    this.locations = ko.observableArray();
+    this.favourites = ko.observableArray();
+    this.recentSearches = ko.observableArray();
 
-      if (results.responseCode === Model.PropertySearchResponseCode.propertiesFound) {
-
-        if (results.totalResults === null) {
-          that.userMessage("There were no properties found for the given location.");
-        } else {
-          // if properties were found, navigate to the search results view model
-          that.searchLocation.totalResults = results.totalResults;
-          that.updateRecentSearches();
-          var viewModel = new ViewModel.SearchResultsViewModel();
-          viewModel.initialize(that.searchLocation, results);
-          application.navigateTo(viewModel);
-        }        
-      } else if (results.responseCode === Model.PropertySearchResponseCode.ambiguousLocation) {
-
-        // if the location was ambiguous, display the list of options
-        that.locations.removeAll();
-        $.each(results.data, function () {
-          var viewModel = new ViewModel.LocationViewModel();
-          viewModel.initialiseDisambiguated(this);
-          that.locations.push(viewModel);
-        });
-        that.updateListStyling(that.locations);
-
-      } else {
-        that.userMessage("The location given was not recognised.");
-      }
-
-      that.isSearchEnabled(true);
-    }
-
-    this.searchLocation.executeSearch(1, successCallback, errorCallback);
-  };
-
-  this.updateRecentSearches = function () {
-    /// <summary>
-    /// Updates the recent search list
-    /// </summary>
-
-    // check to see whether this location already appears in the list
-    var locationPresent = false;
-    $.each(that.recentSearches(), function () {
-      if (this.displayString === that.searchLocation.displayString) {
-        locationPresent = true;
+    // synchronised the search display string and the search-string
+    this.searchDisplayString.subscribe(function () {
+      if (synchroniseSearchStrings) {
+        var newLocation = new LocationViewModel();
+        newLocation.initialise(that.searchDisplayString());
+        that.searchLocation = newLocation;
       }
     });
-    if (locationPresent) {
-      return;
-    }
 
-    // add this new item
-    if (that.recentSearches().length > that.maxRecentSearch) {
-      that.recentSearches.pop();
-    }
-    that.recentSearches.unshift(that.searchLocation);
 
-    that.updateListStyling(that.recentSearches);
-  };
+    // ----- public functions 
 
-  this.updateListStyling = function (observableArray) {
-    /// <summary>
-    /// Updates the first and last element in a list
-    /// </summary>
-    var i;
+    this.executeSearch = function () {
+      /// <summary>
+      /// Executes a search based on the current search string
+      /// </summary>
 
-    if (observableArray()) {
-      for (i = 0; i < observableArray().length; i++) {
-        observableArray()[i].firstElement(i === 0);
-        observableArray()[i].lastElement(i === observableArray().length - 1);
+      that.userMessage("");
+      that.isSearchEnabled(false);
+
+      function errorCallback(error) {
+        /// <summary>
+        /// A callback that is invoked if the search fails, in order to report the failure to the end user
+        /// </summary>
+        that.userMessage("An error occurred while searching. Please check your network connection and try again.");
+        that.isSearchEnabled(true);
       }
-    }
-  };
 
-  this.searchMyLocation = function () {
-    /// <summary>
-    /// Performs a search based on the current geolocation
-    /// </summary>
+      function successCallback(results) {
+        /// <summary>
+        /// A callback that is invoked if the search succeeds
+        /// </summary>
 
-    // check that the use of location is enabled.
-    if (this.locationEnabled() === false) {
-      that.userMessage("The use of location is currently disabled. Please enable via the 'about' page.");
-      return;
-    }
+        if (results.responseCode === PropertySearchResponseCode.propertiesFound) {
 
-    function successCallback(result) {
-      var location = new ViewModel.GeolocationViewModel();
-      location.initialise(result.coords.latitude, result.coords.longitude);
+          if (results.totalResults === null) {
+            that.userMessage("There were no properties found for the given location.");
+          } else {
+            // if properties were found, navigate to the search results view model
+            that.searchLocation.totalResults = results.totalResults;
+            that.updateRecentSearches();
+            var viewModel = new SearchResultsViewModel();
+            viewModel.initialize(that.searchLocation, results);
+            application.navigateTo(viewModel);
+          }
+        } else if (results.responseCode === PropertySearchResponseCode.ambiguousLocation) {
+
+          // if the location was ambiguous, display the list of options
+          that.locations.removeAll();
+          $.each(results.data, function () {
+            var viewModel = new LocationViewModel();
+            viewModel.initialiseDisambiguated(this);
+            that.locations.push(viewModel);
+          });
+          that.updateListStyling(that.locations);
+
+        } else {
+          that.userMessage("The location given was not recognised.");
+        }
+
+        that.isSearchEnabled(true);
+      }
+
+      this.searchLocation.executeSearch(1, successCallback, errorCallback);
+    };
+
+    this.updateRecentSearches = function () {
+      /// <summary>
+      /// Updates the recent search list
+      /// </summary>
+
+      // check to see whether this location already appears in the list
+      var locationPresent = false;
+      $.each(that.recentSearches(), function () {
+        if (this.displayString === that.searchLocation.displayString) {
+          locationPresent = true;
+        }
+      });
+      if (locationPresent) {
+        return;
+      }
+
+      // add this new item
+      if (that.recentSearches().length > that.maxRecentSearch) {
+        that.recentSearches.pop();
+      }
+      that.recentSearches.unshift(that.searchLocation);
+
+      that.updateListStyling(that.recentSearches);
+    };
+
+    this.updateListStyling = function (observableArray) {
+      /// <summary>
+      /// Updates the first and last element in a list
+      /// </summary>
+      var i;
+
+      if (observableArray()) {
+        for (i = 0; i < observableArray().length; i++) {
+          observableArray()[i].firstElement(i === 0);
+          observableArray()[i].lastElement(i === observableArray().length - 1);
+        }
+      }
+    };
+
+    this.searchMyLocation = function () {
+      /// <summary>
+      /// Performs a search based on the current geolocation
+      /// </summary>
+
+      // check that the use of location is enabled.
+      if (this.locationEnabled() === false) {
+        that.userMessage("The use of location is currently disabled. Please enable via the 'about' page.");
+        return;
+      }
+
+      function successCallback(result) {
+        var location = new GeolocationViewModel();
+        location.initialise(result.coords.latitude, result.coords.longitude);
+
+        synchroniseSearchStrings = false;
+        that.searchLocation = location;
+        that.searchDisplayString(location.displayString);
+        synchroniseSearchStrings = true;
+
+        that.executeSearch();
+      }
+
+      function errorCallback() {
+        that.userMessage("Unable to detect current location. Please ensure location is turned on in your phone settings and try again.");
+      }
+
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+    };
+
+    this.selectLocation = function () {
+      /// <summary>
+      /// A function that is invoked when a search location is clicked
+      /// </summary>
+      var location = this;
 
       synchroniseSearchStrings = false;
       that.searchLocation = location;
       that.searchDisplayString(location.displayString);
       synchroniseSearchStrings = true;
 
+      that.locations.removeAll();
       that.executeSearch();
-    }
+    };
 
-    function  errorCallback() {
-      that.userMessage("Unable to detect current location. Please ensure location is turned on in your phone settings and try again.");
-    }
+    this.viewFavourites = function () {
+      /// <summary>
+      /// Navigates to the favourites view
+      /// </summary>
+      var viewModel = new FavouritesViewModel(this);
+      application.navigateTo(viewModel);
+    };
 
-    navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-  };
+    this.viewAbout = function () {
+      /// <summary>
+      /// Navigates to the about view
+      /// </summary>
+      var viewModel = new AboutViewModel(this);
+      application.navigateTo(viewModel);
+    };
 
-  this.selectLocation = function () {
-    /// <summary>
-    /// A function that is invoked when a search location is clicked
-    /// </summary>
-    var location = this;
+    this.getFavouriteByGuid = function (guid) {
+      /// <summary>
+      /// Gets the a favourite by GUID, returning null if it is not found
+      /// </summary>
+      var existingFavourite = null;
 
-    synchroniseSearchStrings = false;
-    that.searchLocation = location;
-    that.searchDisplayString(location.displayString);
-    synchroniseSearchStrings = true;
+      // check if it already favourite
+      $.each(that.favourites(), function () {
+        if (this.guid === guid) {
+          existingFavourite = this;
+        }
+      });
 
-    that.locations.removeAll();
-    that.executeSearch();
-  };
+      return existingFavourite;
+    };
 
-  this.viewFavourites = function () {
-    /// <summary>
-    /// Navigates to the favourites view
-    /// </summary>
-    var viewModel = new ViewModel.FavouritesViewModel(this);
-    application.navigateTo(viewModel);
-  };
+    this.addToFavourites = function (propertyViewModel) {
+      /// <summary>
+      /// Adds the given property view model to the list of favourites
+      /// </summary>
+      var existingFavourite = this.getFavouriteByGuid(propertyViewModel.guid);
 
-  this.viewAbout = function () {
-    /// <summary>
-    /// Navigates to the about view
-    /// </summary>
-    var viewModel = new ViewModel.AboutViewModel(this);
-    application.navigateTo(viewModel);
-  };
-
-  this.getFavouriteByGuid = function (guid) {
-    /// <summary>
-    /// Gets the a favourite by GUID, returning null if it is not found
-    /// </summary>
-    var existingFavourite = null;
-
-    // check if it already favourite
-    $.each(that.favourites(), function () {
-      if (this.guid === guid) {
-        existingFavourite = this;
+      // add or remove
+      if (!existingFavourite) {
+        propertyViewModel.isFavourite(true);
+        this.favourites.push(propertyViewModel);
+      } else {
+        propertyViewModel.isFavourite(false);
+        this.favourites.remove(existingFavourite);
       }
-    });
 
-    return existingFavourite;
-  };
-
-  this.addToFavourites = function (propertyViewModel) {
-    /// <summary>
-    /// Adds the given property view model to the list of favourites
-    /// </summary>
-    var existingFavourite = this.getFavouriteByGuid(propertyViewModel.guid);
-
-    // add or remove
-    if (!existingFavourite) {
-      propertyViewModel.isFavourite(true);
-      this.favourites.push(propertyViewModel);
-    } else {
-      propertyViewModel.isFavourite(false);
-      this.favourites.remove(existingFavourite);
     }
-
   };
-};
+
+  util.registerFactory("PropertySearchViewModel", PropertySearchViewModel);
+
+  return PropertySearchViewModel;
+});

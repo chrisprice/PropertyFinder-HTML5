@@ -1,58 +1,64 @@
-/// <reference path="..//intellisense.js" />
+define(function (require) {
+  var application = require("./ApplicationViewModel").Instance;
+  var util = require("./util");
 
-/*global ko, application, ViewModel*/
-
-ViewModel.PropertyViewModel = function () {
-  /// <summary>
-  /// Represents a single property listing
-  /// </summary>
-  var titleParts;
-
-  // ----- framework fields
-  this.template = "propertyView";
-  this.factoryName = "PropertyViewModel";
-
-  // ----- public fields
-  this.price = undefined;
-  this.bedrooms = undefined;
-  this.bathrooms = undefined;
-  this.propertyType = undefined;
-  this.thumbnailUrl = undefined;
-  this.guid = undefined;
-  this.summary = undefined;
-  this.title = undefined;
-  this.isFavourite = ko.observable(false);
-
-  // ----- public functions
-
-  this.initialize = function (property) {
+  function PropertyViewModel() {
     /// <summary>
-    /// Initializes this view model
+    /// Represents a single property listing
     /// </summary>
 
-    // copy and format the properties required by the UI
-    this.price = property.price;
-    this.bedrooms = property.bedrooms;
-    this.bathrooms = property.bathrooms;
-    this.propertyType = property.propertyType;
-    this.thumbnailUrl = property.thumbnailUrl;
-    this.guid = property.guid;
-    this.summary = property.summary;
+    var titleParts;
 
-    // simplify the title a bit
-    if (property.title) {
-      titleParts = property.title.split(",");
-      if (titleParts.length >= 2) {
-        this.title = titleParts[0] + ", " + titleParts[1];
+    // ----- framework fields
+    this.template = "propertyView";
+    this.factoryName = "PropertyViewModel";
+
+    // ----- public fields
+    this.price = undefined;
+    this.bedrooms = undefined;
+    this.bathrooms = undefined;
+    this.propertyType = undefined;
+    this.thumbnailUrl = undefined;
+    this.guid = undefined;
+    this.summary = undefined;
+    this.title = undefined;
+    this.isFavourite = ko.observable(false);
+
+    // ----- public functions
+
+    this.initialize = function (property) {
+      /// <summary>
+      /// Initializes this view model
+      /// </summary>
+
+      // copy and format the properties required by the UI
+      this.price = property.price;
+      this.bedrooms = property.bedrooms;
+      this.bathrooms = property.bathrooms;
+      this.propertyType = property.propertyType;
+      this.thumbnailUrl = property.thumbnailUrl;
+      this.guid = property.guid;
+      this.summary = property.summary;
+
+      // simplify the title a bit
+      if (property.title) {
+        titleParts = property.title.split(",");
+        if (titleParts.length >= 2) {
+          this.title = titleParts[0] + ", " + titleParts[1];
+        }
       }
-    }
-  };
+    };
 
-  this.select = function () {
-    /// <summary>
-    /// Selects this property, navigating to the property view
-    /// </summary>
-    application.navigateTo(this);
-  };
+    this.select = function () {
+      /// <summary>
+      /// Selects this property, navigating to the property view
+      /// </summary>
+      application.navigateTo(this);
+    };
 
-};
+  }
+
+  util.registerFactory("PropertyViewModel", PropertyViewModel);
+
+  return PropertyViewModel;
+});

@@ -6,7 +6,7 @@ define(function () {
     this.guid = config.guid;
     this.price = config.price;
     this.bedrooms = config.bedrooms;
-    this.bahrooms = config.bathrooms;
+    this.bathrooms = config.bathrooms;
     this.propertyType = config.propertyType;
     this.title = config.title;
     this.thumbnailUrl = config.thumbnailUrl;
