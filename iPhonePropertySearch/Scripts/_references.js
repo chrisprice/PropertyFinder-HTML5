@@ -31,12 +31,17 @@
     log(ERROR, e.toString());
   };
 
-  //Make use of the fact that VS seemingly invokes the current document
-  //code twice. On the second call, rename the module to ensure this 
-  //specific code will be evaluated and then require it to evaluate it.
   var originalDefine = define;
   var lastDefine;
   define = function (name, deps, callback) {
+    //Disallow anonymous modules - unfortunately we can't handle them
+    //without turning everything to guesswork.
+    if (typeof name !== 'string') {
+      log(ERROR, "Intellisense not supported for anonymous modules");
+    }
+    //Make use of the fact that VS seemingly invokes the current document
+    //code twice. On the second call, rename the module to ensure this 
+    //specific code will be evaluated and then require it to evaluate it.
     if (lastDefine === name) {
       log(DEBUG, "Define current document");
       originalDefine("@_ROOT", deps, callback);
