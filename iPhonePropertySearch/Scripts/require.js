@@ -1964,10 +1964,9 @@ var requirejs, require, define;
 
     //Allow for anonymous functions
     if (typeof name !== 'string') {
-      //Adjust args appropriately
-      callback = deps;
-      deps = name;
-      name = null;
+      //Contrary to the above we can't handle annonymous modules
+      //without turning everything to guesswork.
+      req.onError("Intellisense not supported for anonymous modules");
     }
 
     //This module may not have dependencies
@@ -2018,6 +2017,20 @@ var requirejs, require, define;
     //occurs. If no context, use the global queue, and get it processed
     //in the onscript load callback.
     (context ? context.defQueue : globalDefQueue).push([name, deps, callback]);
+
+    //Contrary to the above when working within VS we want to prematurely
+    //trace the dependencies to speed things up and we disallow anoymous
+    //module names.
+    (function () {
+      //Find the right context, use default
+      var context, config,
+          contextName = defContextName;
+      context = contexts[contextName];
+      if (!context) {
+        context = contexts[contextName] = req.s.newContext(contextName);
+      }
+      context.completeLoad(name);
+    }());
   };
 
   define.amd = {
