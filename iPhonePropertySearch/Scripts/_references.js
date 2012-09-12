@@ -33,6 +33,7 @@
 
   var originalDefine = define;
   var lastDefine;
+  var currentDocumentId = "_@ROOT";
   define = function (name, deps, callback) {
     //Disallow anonymous modules - unfortunately we can't handle them
     //without turning everything to guesswork.
@@ -44,12 +45,13 @@
     //specific code will be evaluated and then require it to evaluate it.
     if (lastDefine === name) {
       log(DEBUG, "Define current document");
-      originalDefine("@_ROOT", deps, callback);
+      originalDefine(currentDocumentId, deps, callback);
       log(DEBUG, "Require current document");
-      require(["@_ROOT"], function () {
+      require([currentDocumentId], function () {
+        //This log message never gets printed as VS stops execution of
+        //the current document once it hits the node at which auto-
+        //completion has being invoked.
         log(DEBUG, "Loaded current document and all dependencies");
-      }, function () {
-        log(ERROR, "Failed to load current document and all dependencies");
       });
     } else {
       log(DEBUG, "Define module", name);
