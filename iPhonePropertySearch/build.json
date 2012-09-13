@@ -1,0 +1,8 @@
+﻿{
+  baseUrl: 'Scripts',
+  name: '../almond',
+  include: ['app'],
+  insertRequire: ['app'],
+  out: 'app.min.js',
+  wrap: true
+}
