@@ -9,14 +9,15 @@
   <link rel="apple-touch-icon" href="ApplicationIcon.png"/>
   <link rel="apple-touch-startup-image" href="SplashScreenImage.jpg" />  
   
-  <script src="lib/iscroll.js" type="text/javascript"></script>
-  <script src="lib/jquery-1.6.1.min.js" type="text/javascript"></script>
-  <script src="lib/jquery.tmpl.min.js" type="text/javascript"></script>
-  <script src="lib/knockout-2.1.0.js" type="text/javascript"></script>
-  <script src="lib/jquery.jsonp-2.1.4.min.js" type="text/javascript"></script> 
+  <script src="Scripts/lib/iscroll.js" type="text/javascript"></script>
+  <script src="Scripts/lib/jquery-1.6.1.min.js" type="text/javascript"></script>
+  <script src="Scripts/lib/jquery.tmpl.min.js" type="text/javascript"></script>
+  <script src="Scripts/lib/knockout-2.1.0.js" type="text/javascript"></script>
+  <script src="Scripts/lib/jquery.jsonp-2.1.4.min.js" type="text/javascript"></script> 
 
-  <script src="lib/require.js" type="text/javascript" data-main="app"></script>
-  <link rel="stylesheet" type="text/css" href="view/jquery.mobile-1.0rc2.css" />
+  <script src="Scripts/lib/require.js" type="text/javascript" data-main="Scripts/app"></script>
+  <!--<script src="app.min.js" type="text/javascript"></script>-->
+  <link rel="stylesheet" type="text/css" href="Css/jquery.mobile-1.0rc2.css" />
   
   <style type="text/css" media="all">
     .iScrollWrapper
@@ -94,7 +95,7 @@
 			  <div class="searchForm">
           <img class="spinner"
                data-bind="visible: isSearchEnabled() == false"
-               src="img/spinner.gif" />
+               src="Images/spinner.gif" />
 					<input type="text"
                  class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset"
                  data-bind="value: searchDisplayString,
@@ -156,7 +157,7 @@
                 <div class="ui-btn-inner ui-li">
                   <div class="ui-btn-text">
                     <a class="ui-link-inherit" href="#">
-                      <img class="ui-li-thumb" src="img/pull-icon.png">            
+                      <img class="ui-li-thumb" src="Images/pull-icon.png">            
                       <h3 class="ui-li-heading"><span class="pullUpLabel">Pull up to load more ...</span></h3>
                       <p class="ui-li-desc">
                         Results for <span class="searchString" data-bind="text: searchLocation.displayString"/>, showing
