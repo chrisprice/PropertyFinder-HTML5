@@ -3,6 +3,6 @@
   name: '../almond',
   include: ['app'],
   insertRequire: ['app'],
-  out: 'app.min.js',
+  out: 'Scripts/app.min.js',
   wrap: true
 }
