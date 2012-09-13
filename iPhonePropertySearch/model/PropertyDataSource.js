@@ -1,9 +1,9 @@
-define(function (require) {
-  var Property = require("./Property");
-  var Location = require("./Location");
-  var PropertyDataSourceResponse = require("./PropertyDataSourceResponse");
-  var PropertySearchResponseCode = require("./PropertySearchResponseCode");
-  var JSONDataSource = require("./JSONDataSource");
+define("model/PropertyDataSource", function (require) {
+  var Property = require("model/Property");
+  var Location = require("model/Location");
+  var PropertyDataSourceResponse = require("model/PropertyDataSourceResponse");
+  var PropertySearchResponseCode = require("model/PropertySearchResponseCode");
+  var JSONDataSource = require("model/JSONDataSource");
     
 
   function PropertyDataSource(config) {

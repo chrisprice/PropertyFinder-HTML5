@@ -1,4 +1,4 @@
-﻿define(function () {
+﻿define("model/JSONFileDataSource", function () {
   return function () {
     /// <summary>
     /// A test version of JSONDataSource, which returns 'canned' responses.

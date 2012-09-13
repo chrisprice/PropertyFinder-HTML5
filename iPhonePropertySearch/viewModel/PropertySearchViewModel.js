@@ -1,12 +1,12 @@
-define(function (require) {
-  var application = require("./ApplicationViewModel").Instance;
-  var PropertySearchResponseCode = require("../model/PropertySearchResponseCode");
-  var LocationViewModel = require("./LocationViewModel");
-  var SearchResultsViewModel = require("./SearchResultsViewModel");
-  var GeolocationViewModel = require("./GeolocationViewModel");
-  var FavouritesViewModel = require("./FavouritesViewModel");
-  var AboutViewModel = require("./AboutViewModel");
-  var util = require("./util");
+define("viewModel/PropertySearchViewModel", function (require) {
+  var application = require("viewModel/ApplicationViewModel").Instance;
+  var PropertySearchResponseCode = require("model/PropertySearchResponseCode");
+  var LocationViewModel = require("viewModel/LocationViewModel");
+  var SearchResultsViewModel = require("viewModel/SearchResultsViewModel");
+  var GeolocationViewModel = require("viewModel/GeolocationViewModel");
+  var FavouritesViewModel = require("viewModel/FavouritesViewModel");
+  var AboutViewModel = require("viewModel/AboutViewModel");
+  var util = require("viewModel/util");
   
   function PropertySearchViewModel() {
     /// <summary>
@@ -36,6 +36,7 @@ define(function (require) {
     this.searchDisplayString.subscribe(function () {
       if (synchroniseSearchStrings) {
         var newLocation = new LocationViewModel();
+        
         newLocation.initialise(that.searchDisplayString());
         that.searchLocation = newLocation;
       }

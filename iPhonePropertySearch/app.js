@@ -1,7 +1,7 @@
-define(function (require) {
-  var PropertySearchViewModel = require("./viewModel/PropertySearchViewModel");
-  var util = require("./viewModel/util");
-  var application = require("./viewModel/ApplicationViewModel").Instance;
+define("app", function (require) {
+  var PropertySearchViewModel = require("viewModel/PropertySearchViewModel");
+  var util = require("viewModel/util");
+  var application = require("viewModel/ApplicationViewModel").Instance;
 
   var myScroll;
 

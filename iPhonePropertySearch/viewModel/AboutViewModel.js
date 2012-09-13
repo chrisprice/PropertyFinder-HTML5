@@ -1,5 +1,5 @@
-define(function (require) {
-  var util = require("./util");
+define("viewModel/AboutViewModel", function (require) {
+  var util = require("viewModel/util");
 
   function AboutViewModel(propertySearchViewModel) {
     /// <summary>

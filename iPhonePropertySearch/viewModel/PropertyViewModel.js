@@ -1,6 +1,6 @@
-define(function (require) {
-  var application = require("./ApplicationViewModel").Instance;
-  var util = require("./util");
+define("viewModel/PropertyViewModel", function (require) {
+  var application = require("viewModel/ApplicationViewModel").Instance;
+  var util = require("viewModel/util");
 
   function PropertyViewModel() {
     /// <summary>

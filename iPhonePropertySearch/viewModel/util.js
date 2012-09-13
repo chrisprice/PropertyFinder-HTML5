@@ -1,4 +1,4 @@
-﻿define(function (require) {
+﻿define("viewModel/util", function (require) {
   var viewModels = {};
 
   return {

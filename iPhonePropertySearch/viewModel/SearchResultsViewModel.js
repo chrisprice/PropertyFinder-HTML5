@@ -1,4 +1,4 @@
-define(function (require) {
+define("viewModel/SearchResultsViewModel", function (require) {
   var PropertyViewModel = require("./PropertyViewModel");
   var util = require("./util");
 

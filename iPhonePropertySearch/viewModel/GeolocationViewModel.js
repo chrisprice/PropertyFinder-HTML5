@@ -1,6 +1,6 @@
-define(function (require) {
-  var propertyDataSource = require("../model/PropertyDataSource").Instance;
-  var util = require("./util");
+define("viewModel/GeolocationViewModel", function (require) {
+  var propertyDataSource = require("model/PropertyDataSource").Instance;
+  var util = require("viewModel/util");
 
   function GeolocationViewModel() {
     /// <summary>

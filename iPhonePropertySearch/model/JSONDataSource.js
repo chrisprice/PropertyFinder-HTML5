@@ -1,4 +1,4 @@
-define(function () {
+define("model/JSONDataSource", function () {
   return function () {
     /// <summary>
     /// A service that allows property searches, returning the results in JSON format. This service

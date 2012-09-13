@@ -1,4 +1,4 @@
-﻿define(function () {
+﻿define("model/PropertyDataSourceResponse", function () {
   return function (config) {
     /// <summary>
     /// A model that represents the response from PropertyDataSource

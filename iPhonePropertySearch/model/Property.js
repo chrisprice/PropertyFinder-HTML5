@@ -1,4 +1,4 @@
-define(function () {
+define("model/Property", function () {
   return function (config) {
     /// <summary>
     /// A model that represents a single property listing.

@@ -1,5 +1,5 @@
-define(function (require) {
-  var util = require("./util");
+define("viewModel/FavouritesViewModel", function (require) {
+  var util = require("viewModel/util");
 
   function FavouritesViewModel(propertySearchViewModel) {
     /// <summary>
