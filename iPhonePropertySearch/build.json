@@ -1,7 +1,7 @@
 ﻿{
   baseUrl: 'Scripts',
   name: '../almond',
-  include: ['app'],
+  include: ['lib/jquery-1.8.1','app'],
   insertRequire: ['app'],
   out: 'Scripts/app.min.js',
   wrap: true
