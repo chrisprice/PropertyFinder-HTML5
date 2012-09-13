@@ -1,4 +1,5 @@
 define("model/PropertyDataSource", function (require) {
+  var $ = require("lib/jquery");
   var Property = require("model/Property");
   var Location = require("model/Location");
   var PropertyDataSourceResponse = require("model/PropertyDataSourceResponse");

@@ -1,4 +1,6 @@
 ﻿define("viewModel/ApplicationViewModel", function (require) {
+  var $ = require("lib/jquery");
+  var ko = require("lib/knockout");
   var util = require("viewModel/util");
 
   function ApplicationViewModel() {

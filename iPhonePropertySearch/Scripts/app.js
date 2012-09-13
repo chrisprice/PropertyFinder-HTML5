@@ -1,4 +1,8 @@
 define("app", function (require) {
+  var $ = require("lib/jquery");
+  require("lib/jquery.tmpl");
+  var ko = require("lib/knockout");
+  var iScroll = require("lib/iscroll");
   var PropertySearchViewModel = require("viewModel/PropertySearchViewModel");
   var util = require("viewModel/util");
   var application = require("viewModel/ApplicationViewModel").Instance;
@@ -10,7 +14,7 @@ define("app", function (require) {
       $(this).addClass("shown");
     });
   }
-
+  
   function setState(jsonState) {
     var state = $.parseJSON(jsonState);
     if (!state)

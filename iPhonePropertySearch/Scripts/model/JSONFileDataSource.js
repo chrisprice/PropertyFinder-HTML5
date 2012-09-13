@@ -1,4 +1,5 @@
-﻿define("model/JSONFileDataSource", function () {
+﻿define("model/JSONFileDataSource", function (require) {
+  var $ = require("lib/jquery");
   return function () {
     /// <summary>
     /// A test version of JSONDataSource, which returns 'canned' responses.

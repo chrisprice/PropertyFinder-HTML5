@@ -4,7 +4,7 @@
   var DEBUG = 3, WARN = 2, ERROR = 1, NONE = 0;
 
   //Set the logging level
-  var logLevel = WARN;
+  var logLevel = DEBUG;
 
   function log(level) {
     var msg = Array.prototype.slice.call(arguments, 1);

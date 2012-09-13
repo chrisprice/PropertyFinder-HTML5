@@ -1,4 +1,5 @@
 define("viewModel/GeolocationViewModel", function (require) {
+  var ko = require("lib/knockout");
   var propertyDataSource = require("model/PropertyDataSource").Instance;
   var util = require("viewModel/util");
 
@@ -9,7 +10,7 @@ define("viewModel/GeolocationViewModel", function (require) {
 
     // ----- framework fields
     this.factoryName = "GeolocationViewModel";
-
+    
     // ----- public fields
     this.lat = undefined;
     this.lon = undefined;

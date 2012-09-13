@@ -1,4 +1,6 @@
 define("viewModel/SearchResultsViewModel", function (require) {
+  var $ = require("lib/jquery");
+  var ko = require("lib/knockout");
   var PropertyViewModel = require("./PropertyViewModel");
   var util = require("./util");
 

@@ -1,4 +1,6 @@
 define("viewModel/PropertySearchViewModel", function (require) {
+  var $ = require("lib/jquery");
+  var ko = require("lib/knockout");
   var application = require("viewModel/ApplicationViewModel").Instance;
   var PropertySearchResponseCode = require("model/PropertySearchResponseCode");
   var LocationViewModel = require("viewModel/LocationViewModel");

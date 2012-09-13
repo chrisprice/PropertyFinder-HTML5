@@ -1,4 +1,6 @@
-define("model/JSONDataSource", function () {
+define("model/JSONDataSource", function (require) {
+  var $ = require("lib/jquery");
+  require("lib/jquery.jsonp");
   return function () {
     /// <summary>
     /// A service that allows property searches, returning the results in JSON format. This service

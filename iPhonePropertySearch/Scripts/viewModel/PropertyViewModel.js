@@ -1,4 +1,5 @@
 define("viewModel/PropertyViewModel", function (require) {
+  var ko = require("lib/knockout");
   var application = require("viewModel/ApplicationViewModel").Instance;
   var util = require("viewModel/util");
 
