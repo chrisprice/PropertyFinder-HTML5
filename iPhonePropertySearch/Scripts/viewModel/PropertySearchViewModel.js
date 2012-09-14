@@ -232,8 +232,8 @@ define("viewModel/PropertySearchViewModel", function (require) {
         this.favourites.remove(existingFavourite);
       }
 
-    }
-  };
+    };
+  }
 
   util.registerFactory("PropertySearchViewModel", PropertySearchViewModel);
 
